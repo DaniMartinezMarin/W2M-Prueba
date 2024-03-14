@@ -3,11 +3,7 @@ import { HeroComponent } from './components/hero/hero.component';
 import { AsyncPipe } from '@angular/common';
 import { Hero } from './models/hero.model';
 import { HeroesService } from './services/heroes.service';
-import {
-  debounceTime,
-  map,
-  startWith,
-} from 'rxjs/operators';
+import { debounceTime, map, startWith } from 'rxjs/operators';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
@@ -42,9 +38,9 @@ export class HeroesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this._heroesService
-      .getHeroes()
-      .subscribe((heroes) => (this.heroes = heroes));
+    this._heroesService.getHeroes().subscribe((heroes) => {
+      this.heroes = heroes;
+    });
 
     this.filteredOptions = this.heroName.valueChanges.pipe(
       startWith(''),
@@ -61,8 +57,6 @@ export class HeroesComponent implements OnInit {
       .open(ConfirmModalComponent)
       .afterClosed()
       .subscribe((confirm) => {
-        console.log('confirm', confirm);
-
         if (confirm) {
           const index = this.heroes.findIndex((item) => item.id === idToRemove);
           if (index !== -1) this.heroes.splice(index, 1);

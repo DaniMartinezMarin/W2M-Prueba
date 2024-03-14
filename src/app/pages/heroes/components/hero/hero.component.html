@@ -14,7 +14,13 @@
     <p class="full-name">{{ hero.fullName }}</p>
   </mat-card-content>
   <mat-card-actions class="buttons">
-    <button mat-raised-button color="accent">Editar</button>
+    <button
+      mat-raised-button
+      color="accent"
+      [routerLink]="getRouterLink(hero.id)"
+    >
+      Editar
+    </button>
     <button mat-raised-button color="warn" (click)="delete.emit(hero.id)">
       Borrar
     </button>

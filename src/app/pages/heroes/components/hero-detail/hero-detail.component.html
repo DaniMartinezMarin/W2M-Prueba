@@ -1,0 +1,42 @@
+<div class="hero-detail">
+  <h2>Detalles:</h2>
+  <div class="details">
+    <form class="fields" [formGroup]="heroForm" (ngSubmit)="saveHero()">
+      <mat-form-field>
+        <mat-label>Nombre</mat-label>
+        <input formControlName="name" matInput type="text" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Nombre completo</mat-label>
+        <input formControlName="fullName" matInput type="text" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Editor</mat-label>
+        <input formControlName="publisher" matInput type="text" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Url imagen</mat-label>
+        <input formControlName="image" matInput type="text" />
+      </mat-form-field>
+
+      <div class="buttons">
+        <button mat-raised-button color="accent" [routerLink]="['/heroes']">
+          Cancelar
+        </button>
+        <button [disabled]="heroForm.invalid" mat-raised-button color="primary" type="submit">
+          Guardar
+        </button>
+      </div>
+    </form>
+
+    <img
+      class="hero-image"
+      mat-card-image
+      [src]="hero.image"
+      [alt]="hero.name"
+    />
+  </div>
+</div>

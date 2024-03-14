@@ -10,7 +10,7 @@ import { Hero } from '../models/hero.model';
 export class HeroesService {
   private _apiHeroesUrl = 'api/heroes';
   private _httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
   constructor(private _http: HttpClient) {}
@@ -21,8 +21,17 @@ export class HeroesService {
       .pipe(map((heroes) => heroes.map((hero) => new Hero(hero))));
   }
 
+  getHero(id: number): Observable<Hero> {
+    const url = `${this._apiHeroesUrl}/${id}`;
+    return this._http.get<Hero>(url);
+  }
+
   deleteHero(heroId: number): Observable<Hero> {
     const url = `${this._apiHeroesUrl}/${heroId}`;
     return this._http.delete<Hero>(url, this._httpOptions);
+  }
+
+  updateHero(hero: Hero): Observable<any> {
+    return this._http.put(this._apiHeroesUrl, hero, this._httpOptions);
   }
 }
