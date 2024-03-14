@@ -1,7 +1,7 @@
 import { HeroInterface } from "../interfaces/hero.interface";
 
 export class Hero {
-  id: string;
+  id: number;
   name: string;
   fullName: string;
   publisher: string;
@@ -10,8 +10,8 @@ export class Hero {
   constructor(data: HeroInterface) {
     this.id = data.id;
     this.name = data.name;
-    this.fullName = data.biography["full-name"];
-    this.publisher = data.biography.publisher;
-    this.image = data.image.url;
+    this.fullName = data.fullName;
+    this.publisher = data.publisher;
+    this.image = data.image;
   }
 }

@@ -1,26 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HeroesResponse } from '../interfaces/hero.interface';
-import { Observable, map } from 'rxjs';
+import { HeroInterface } from '../interfaces/hero.interface';
+import { Observable, map, of } from 'rxjs';
 import { Hero } from '../models/hero.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HeroesService {
-  private _apiKey = '10224864604392271';
+  private _apiHeroesUrl = 'api/heroes';
 
   constructor(private _http: HttpClient) {}
 
   getHeroes(): Observable<Hero[]> {
-    const url = `https://superheroapi.com/api/${this._apiKey}/search/%man`;
-
     return this._http
-      .get<HeroesResponse>(url)
-      .pipe(
-        map((data: HeroesResponse) =>
-          data.results.map((hero) => new Hero(hero))
-        )
-      );
+      .get<HeroInterface[]>(this._apiHeroesUrl)
+      .pipe(map((heroes) => heroes.map((hero) => new Hero(hero))));
+  }
+
+  searchHeroes(term: string): Observable<Hero[]> {
+    return this._http
+      .get<Hero[]>(`${this._apiHeroesUrl}/?name=${term}`)
+      .pipe(map((heroes) => heroes.map((hero) => new Hero(hero))));
   }
 }

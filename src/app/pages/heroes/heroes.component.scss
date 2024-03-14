@@ -1,10 +1,41 @@
 .heroes {
-  display: grid;
-  margin: 0 auto;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 20px;
-}
-
-.heroes li {
   display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  .search {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    align-items: center;
+    margin: 0 auto;
+    gap: 0.5rem;
+
+    label {
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+
+    input {
+      padding: 0.5rem;
+      width: 100%;
+      box-sizing: border-box;
+      display: block;
+    }
+
+    input:focus {
+      outline: #336699 auto 1px;
+    }
+  }
+
+  .heroes-list {
+    display: grid;
+    margin: 0 auto;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 1.25rem;
+
+    li {
+      display: flex;
+    }
+  }
 }

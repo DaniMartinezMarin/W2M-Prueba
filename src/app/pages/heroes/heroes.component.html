@@ -1,6 +1,12 @@
-<h2>My Heroes</h2>
-<ul class="heroes" *ngIf="heroes.length > 0">
-  <li *ngFor="let hero of heroes">
-    <app-hero [hero]="hero"></app-hero>
-  </li>
-</ul>
+<div class="heroes">
+  <div class="search">
+    <label for="search-hero">Buscar Héroe</label>
+    <input #searchHero id="search-hero" (input)="onSearch(searchHero.value)" />
+  </div>
+
+  <ul class="heroes-list">
+    <li *ngFor="let hero of heroes$ | async">
+      <app-hero [hero]="hero"></app-hero>
+    </li>
+  </ul>
+</div>

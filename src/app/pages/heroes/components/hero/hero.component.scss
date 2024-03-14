@@ -7,9 +7,11 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
 
-  .mdc-card__actions {
+  .buttons {
+    gap: 10px;
     position: absolute;
     bottom: 0;
+    right: 0;
   }
 
   .header-image {
