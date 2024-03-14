@@ -1,0 +1,35 @@
+.hero {
+  min-width: 400px;
+  max-width: 400px;
+  height: 650px;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+
+  .mdc-card__actions {
+    position: absolute;
+    bottom: 0;
+  }
+
+  .header-image {
+    background-size: cover;
+  }
+
+  .hero-name {
+    color: white;
+  }
+
+  .full-name {
+    color: rgba(255, 255, 255, 0.7);
+    padding-top: 5px;
+  }
+
+  .hero-image {
+    max-height: 500px;
+  }
+}
+
+.hero:hover {
+  box-shadow: 0 4px 6px rgb(160, 148, 68);
+}
