@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HeroInterface } from '../interfaces/hero.interface';
 import { Observable, map, of } from 'rxjs';
@@ -9,6 +9,9 @@ import { Hero } from '../models/hero.model';
 })
 export class HeroesService {
   private _apiHeroesUrl = 'api/heroes';
+  private _httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
 
   constructor(private _http: HttpClient) {}
 
@@ -18,9 +21,8 @@ export class HeroesService {
       .pipe(map((heroes) => heroes.map((hero) => new Hero(hero))));
   }
 
-  searchHeroes(term: string): Observable<Hero[]> {
-    return this._http
-      .get<Hero[]>(`${this._apiHeroesUrl}/?name=${term}`)
-      .pipe(map((heroes) => heroes.map((hero) => new Hero(hero))));
+  deleteHero(heroId: number): Observable<Hero> {
+    const url = `${this._apiHeroesUrl}/${heroId}`;
+    return this._http.delete<Hero>(url, this._httpOptions);
   }
 }

@@ -21,7 +21,7 @@
   <ul class="heroes-list">
     @for (hero of filteredOptions | async; track hero) {
     <li>
-      <app-hero [hero]="hero"></app-hero>
+      <app-hero [hero]="hero" (delete)="deleteHero($event)"></app-hero>
     </li>
     }
   </ul>

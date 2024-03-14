@@ -1,4 +1,5 @@
-<mat-card class="hero" *ngIf="hero">
+@if(hero){
+<mat-card class="hero">
   <mat-card-header>
     <div
       mat-card-avatar
@@ -14,6 +15,9 @@
   </mat-card-content>
   <mat-card-actions class="buttons">
     <button mat-raised-button color="accent">Editar</button>
-    <button mat-raised-button color="warn">Borrar</button>
+    <button mat-raised-button color="warn" (click)="delete.emit(hero.id)">
+      Borrar
+    </button>
   </mat-card-actions>
 </mat-card>
+}

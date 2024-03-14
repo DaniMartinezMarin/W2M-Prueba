@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroComponent } from './components/hero/hero.component';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Hero } from './models/hero.model';
 import { HeroesService } from './services/heroes.service';
-import { Subject } from 'rxjs/internal/Subject';
 import {
   debounceTime,
-  distinctUntilChanged,
   map,
   startWith,
 } from 'rxjs/operators';
@@ -15,12 +13,13 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { Observable } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-heroes',
   standalone: true,
   imports: [
-    NgIf,
     AsyncPipe,
     HeroComponent,
     FormsModule,
@@ -37,7 +36,10 @@ export class HeroesComponent implements OnInit {
   heroName = new FormControl<string | Hero>('');
   filteredOptions?: Observable<Hero[]>;
 
-  constructor(private _heroesService: HeroesService) {}
+  constructor(
+    private _heroesService: HeroesService,
+    private _matDialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this._heroesService
@@ -48,12 +50,25 @@ export class HeroesComponent implements OnInit {
       startWith(''),
       debounceTime(300),
       map((value) => {
-        console.log('valor', value);
-
         const name = typeof value === 'string' ? value : value?.name;
         return name ? this._filter(name as string) : this.heroes.slice();
       })
     );
+  }
+
+  deleteHero(idToRemove: number) {
+    this._matDialog
+      .open(ConfirmModalComponent)
+      .afterClosed()
+      .subscribe((confirm) => {
+        console.log('confirm', confirm);
+
+        if (confirm) {
+          const index = this.heroes.findIndex((item) => item.id === idToRemove);
+          if (index !== -1) this.heroes.splice(index, 1);
+          this.heroName.updateValueAndValidity();
+        }
+      });
   }
 
   displayFn(hero: Hero): string {
