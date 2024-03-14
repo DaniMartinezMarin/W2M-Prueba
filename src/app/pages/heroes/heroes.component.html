@@ -1,12 +1,28 @@
 <div class="heroes">
-  <div class="search">
+  <form class="search">
     <label for="search-hero">Buscar Héroe</label>
-    <input #searchHero id="search-hero" (input)="onSearch(searchHero.value)" />
-  </div>
+    <mat-form-field class="search-hero">
+      <mat-label>Héroe</mat-label>
+      <input
+        #searchHero
+        type="text"
+        matInput
+        [formControl]="heroName"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        @for (option of filteredOptions | async; track option) {
+        <mat-option [value]="option">{{ option.name }}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
 
   <ul class="heroes-list">
-    <li *ngFor="let hero of heroes$ | async">
+    @for (hero of filteredOptions | async; track hero) {
+    <li>
       <app-hero [hero]="hero"></app-hero>
     </li>
+    }
   </ul>
 </div>
