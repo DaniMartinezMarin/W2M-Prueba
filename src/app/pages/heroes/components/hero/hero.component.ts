@@ -19,4 +19,9 @@ export class HeroComponent {
   getRouterLink(heroId: number) {
     return `/heroes/detail/${heroId}`;
   }
+
+  deleteHero(heroId: number, event: MouseEvent): void {
+    event.stopPropagation();
+    this.delete.emit(heroId);
+  }
 }

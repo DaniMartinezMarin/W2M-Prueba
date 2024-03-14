@@ -14,4 +14,11 @@ export const HERO_ROUTES: Routes = [
         (c) => c.HeroDetailComponent
       ),
   },
+  {
+    path: 'create',
+    loadComponent: () =>
+      import('./components/hero-detail/hero-detail.component').then(
+        (c) => c.HeroDetailComponent
+      ),
+  },
 ];

@@ -11,7 +11,7 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { Hero } from '../../models/hero.model';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HeroesService } from '../../services/heroes.service';
 import { Location } from '@angular/common';
 
@@ -25,7 +25,7 @@ import { Location } from '@angular/common';
     MatButtonModule,
     MatIconModule,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './hero-detail.component.html',
   styleUrl: './hero-detail.component.scss',
@@ -39,27 +39,29 @@ export class HeroDetailComponent implements OnInit {
     image: '',
   };
 
-  heroForm: FormGroup = this._fb.group({
-    id: '',
-    name: '',
-    fullName: '',
-    publisher: '',
-    image: '',
-  });
+  heroForm: FormGroup = this._fb.group({});
+
+  isCreateMode = true;
 
   constructor(
-    private route: ActivatedRoute,
+    private _route: ActivatedRoute,
     private _fb: FormBuilder,
     private _heroService: HeroesService,
-    private _location: Location
+    private _location: Location,
+    private _router: Router
   ) {}
 
   ngOnInit(): void {
-    this.getHero();
+    this._initForm();
+
+    if (!this._router.url.includes('create')) {
+      const id = Number(this._route.snapshot.paramMap.get('id'));
+      this.isCreateMode = false;
+      this.getHero(id);
+    }
   }
 
-  getHero(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+  getHero(id: number): void {
     this._heroService.getHero(id).subscribe((hero) => {
       this.hero = hero;
       this._initForm();
@@ -68,23 +70,25 @@ export class HeroDetailComponent implements OnInit {
 
   saveHero() {
     const heroToSave = this.heroForm.getRawValue() as Hero;
-    this._heroService.updateHero(heroToSave).subscribe(() => this._location.back());
+
+    if (this.isCreateMode) {
+      this._heroService
+        .createHero(heroToSave)
+        .subscribe(() => this._location.back());
+    } else {
+      heroToSave.id = this.hero.id;
+      this._heroService
+        .updateHero(heroToSave)
+        .subscribe(() => this._location.back());
+    }
   }
 
   private _initForm() {
     this.heroForm = this._fb.group({
-      id: [this.hero.id, Validators.required],
       name: [this.hero.name, Validators.required],
       fullName: [this.hero.fullName],
       publisher: [this.hero.publisher],
       image: [this.hero.image],
-    });
-
-    this.heroForm.valueChanges.subscribe((formValues) => {
-      this.hero = {
-        ...this.hero,
-        ...formValues
-      };
     });
   }
 }

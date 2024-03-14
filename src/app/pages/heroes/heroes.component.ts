@@ -11,6 +11,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
+import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-heroes',
@@ -23,6 +25,7 @@ import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.
     MatInputModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
+    MatButtonModule
   ],
   templateUrl: './heroes.component.html',
   styleUrl: './heroes.component.scss',
@@ -34,7 +37,8 @@ export class HeroesComponent implements OnInit {
 
   constructor(
     private _heroesService: HeroesService,
-    private _matDialog: MatDialog
+    private _matDialog: MatDialog,
+    private _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -63,6 +67,10 @@ export class HeroesComponent implements OnInit {
           this.heroName.updateValueAndValidity();
         }
       });
+  }
+
+  goToCreatePage() {
+    this._router.navigate(['heroes', 'create']);
   }
 
   displayFn(hero: Hero): string {

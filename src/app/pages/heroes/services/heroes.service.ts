@@ -34,4 +34,8 @@ export class HeroesService {
   updateHero(hero: Hero): Observable<any> {
     return this._http.put(this._apiHeroesUrl, hero, this._httpOptions);
   }
+
+  createHero(hero: Hero): Observable<Hero> {
+    return this._http.post<Hero>(this._apiHeroesUrl, hero, this._httpOptions);
+  }
 }

@@ -1,5 +1,5 @@
 @if(hero){
-<mat-card class="hero">
+<mat-card class="hero" [routerLink]="getRouterLink(hero.id)">
   <mat-card-header>
     <div
       mat-card-avatar
@@ -21,7 +21,7 @@
     >
       Editar
     </button>
-    <button mat-raised-button color="warn" (click)="delete.emit(hero.id)">
+    <button mat-raised-button color="warn" (click)="deleteHero(hero.id, $event)">
       Borrar
     </button>
   </mat-card-actions>
