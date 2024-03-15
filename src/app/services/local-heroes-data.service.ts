@@ -221,7 +221,7 @@ export class LocalHeroesDataService implements InMemoryDbService {
         id: 393,
         name: 'Kool-Aid Man',
         fullName: '',
-        publisher: 'null',
+        publisher: 'DC Comics',
         image:
           'https://www.superherodb.com/pictures2/portraits/10/100/1343.jpg',
       },

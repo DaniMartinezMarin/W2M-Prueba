@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HeroInterface } from '../interfaces/hero.interface';
-import { Observable, map, of } from 'rxjs';
+import { Observable, Subject, map, of } from 'rxjs';
 import { Hero } from '../models/hero.model';
 
 @Injectable({
@@ -12,6 +12,8 @@ export class HeroesService {
   private _httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
+
+  errorOnSave: Subject<boolean> = new Subject();
 
   constructor(private _http: HttpClient) {}
 

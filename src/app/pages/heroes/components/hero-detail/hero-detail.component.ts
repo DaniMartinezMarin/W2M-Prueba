@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -15,7 +15,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HeroesService } from '../../services/heroes.service';
 import { Location } from '@angular/common';
 import { BackofficeManagerService } from '../../../../services/backoffice-manager.service';
-import { delay, finalize } from 'rxjs';
+import { catchError, delay, finalize, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-hero-detail',
@@ -86,18 +86,32 @@ export class HeroDetailComponent implements OnInit {
       this._heroService
         .createHero(heroToSave)
         .pipe(
-          finalize(() => this._backofficeManagerService.removePetition(true))
+          finalize(() => this._backofficeManagerService.removePetition(true)),
+          catchError((error) => {
+            this._heroService.errorOnSave.next(true);
+            return throwError(() => new Error(error));
+          })
         )
-        .subscribe(() => this._location.back());
+        .subscribe(() => {
+          this._heroService.errorOnSave.next(false);
+          this._location.back();
+        });
     } else {
       heroToSave.id = this.hero.id;
       this._backofficeManagerService.addPetition(true);
       this._heroService
         .updateHero(heroToSave)
         .pipe(
-          finalize(() => this._backofficeManagerService.removePetition(true))
+          finalize(() => this._backofficeManagerService.removePetition(true)),
+          catchError((error) => {
+            this._heroService.errorOnSave.next(true);
+            return throwError(() => new Error(error));
+          })
         )
-        .subscribe(() => this._location.back());
+        .subscribe(() => {
+          this._heroService.errorOnSave.next(false);
+          this._location.back();
+        });
     }
   }
 
