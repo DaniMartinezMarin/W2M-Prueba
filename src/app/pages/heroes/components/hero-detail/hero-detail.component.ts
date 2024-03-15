@@ -57,7 +57,7 @@ export class HeroDetailComponent implements OnInit {
   ngOnInit(): void {
     this._initForm();
 
-    if (!this._router.url.includes('create')) {
+    if (!this._router.url.toString().includes('create')) {
       const id = Number(this._route.snapshot.paramMap.get('id'));
       this.isCreateMode = false;
       this.getHero(id);
@@ -80,8 +80,9 @@ export class HeroDetailComponent implements OnInit {
 
   saveHero() {
     const heroToSave = this.heroForm.getRawValue() as Hero;
-
     if (this.isCreateMode) {
+
+
       this._backofficeManagerService.addPetition(true);
       this._heroService
         .createHero(heroToSave)
