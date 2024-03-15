@@ -14,6 +14,8 @@ import { Hero } from '../../models/hero.model';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HeroesService } from '../../services/heroes.service';
 import { Location } from '@angular/common';
+import { BackofficeManagerService } from '../../../../services/backoffice-manager.service';
+import { delay, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-hero-detail',
@@ -48,7 +50,8 @@ export class HeroDetailComponent implements OnInit {
     private _fb: FormBuilder,
     private _heroService: HeroesService,
     private _location: Location,
-    private _router: Router
+    private _router: Router,
+    private _backofficeManagerService: BackofficeManagerService
   ) {}
 
   ngOnInit(): void {
@@ -62,23 +65,38 @@ export class HeroDetailComponent implements OnInit {
   }
 
   getHero(id: number): void {
-    this._heroService.getHero(id).subscribe((hero) => {
-      this.hero = hero;
-      this._initForm();
-    });
+    this._backofficeManagerService.addPetition(true);
+    this._heroService
+      .getHero(id)
+      .pipe(
+        delay(500),
+        finalize(() => this._backofficeManagerService.removePetition(true))
+      )
+      .subscribe((hero) => {
+        this.hero = hero;
+        this._initForm();
+      });
   }
 
   saveHero() {
     const heroToSave = this.heroForm.getRawValue() as Hero;
 
     if (this.isCreateMode) {
+      this._backofficeManagerService.addPetition(true);
       this._heroService
         .createHero(heroToSave)
+        .pipe(
+          finalize(() => this._backofficeManagerService.removePetition(true))
+        )
         .subscribe(() => this._location.back());
     } else {
       heroToSave.id = this.hero.id;
+      this._backofficeManagerService.addPetition(true);
       this._heroService
         .updateHero(heroToSave)
+        .pipe(
+          finalize(() => this._backofficeManagerService.removePetition(true))
+        )
         .subscribe(() => this._location.back());
     }
   }

@@ -1,2 +1,7 @@
-<h1>{{title}}</h1>
+@if (loading) {
+<app-loading [transparent]="false"></app-loading>
+} @if (transparentLoading) {
+<app-loading [transparent]="true"></app-loading>
+}
+<h1>{{ title }}</h1>
 <router-outlet></router-outlet>
